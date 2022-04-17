@@ -4,13 +4,13 @@
       <el-button @click="dialogVisible = true" type="primary">+新增</el-button>
       <el-form style="display: flex; align-items: center;">
         <el-form-item>
-          <el-input v-model="form.select" style="margin-top: 20px"></el-input>
+          <el-input v-model="form1.select" style="margin-top: 20px"></el-input>
         </el-form-item>
         <el-button @click="select" type="primary" style="height: 40px; margin-left: 10px">搜索</el-button>
       </el-form>
     </div>
     <el-dialog title="新增用户" :visible.sync="dialogVisible" width="50%" class="text">
-      <common-form></common-form>
+      <common-form @addUser="addUser" :form="form"></common-form>
     </el-dialog>
     <el-table :data="userInfo" style="width: 100%;line-height: 30px; margin-top: 20px;">
       <el-table-column prop="name" label="姓名" width="180">
@@ -46,9 +46,10 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      form: {
+      form1: {
         select: ''
       },
+      form: {},
       userInfo: []
     };
   },
@@ -67,16 +68,22 @@ export default {
 
     },
     handleEdit(index, row) {
-      console.log(index, row);
+      this.form = row
+      this.dialogVisible = true
     },
     handleDelete(index, row) {
       console.log(index, row);
+      this.userInfo.splice(index, 1, row)
+      this.dialogVisible = false
+    },
+    addUser(value) {
+      this.userInfo.push(value)
+      this.dialogVisible = false
     }
   },
 
   mounted() {
     getUserInfo().then(res => {
-      // console.log(res);
       this.userInfo = res
     })
   }

@@ -25,20 +25,24 @@
 <script>
 export default {
   name: 'CommonForm',
+  props: {
+    form: {
+      name: '',
+      age: '',
+      sex: '',
+      birthday: '',
+      address: '',
+    }
+  },
   data() {
     return {
-      form: {
-        name: '',
-        age: '',
-        sex: '',
-        birthday: '',
-        address: '',
-      }
+
     };
   },
   methods: {
     onSubmit() {
-      console.log('helo');
+      console.log(this.form);
+      this.$emit('addUser', this.form);
     }
   }
 }
