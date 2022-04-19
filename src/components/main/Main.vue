@@ -2,7 +2,7 @@
   <div id="app">
     <el-container style="height:100%">
       <el-aside width="auto">
-        <aside-1></aside-1>
+        <aside-menu/>
       </el-aside>
       <el-container>
         <el-header>
@@ -17,15 +17,13 @@
 </template>
 
 <script>
-import Aside1 from '../views/HomeChildren/Aside1.vue'
-import User from "../views/HomeChildren/User.vue"
+import AsideMenu from "@/components/main/AsideMenu";
 import CommonHeader from './CommonHeader.vue'
 export default {
   name: 'Home',
   components: {
-    User,
-    Aside1,
-    CommonHeader
+    CommonHeader,
+    AsideMenu,
   }
 }
 </script>

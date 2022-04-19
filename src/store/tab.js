@@ -1,6 +1,6 @@
 export default {
   state: {
-    isCollapse: false,
+    isCollapse: true,
     tabsList: [
       {
         path: "/home",

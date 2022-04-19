@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="dialog">
-      <el-button @click="dialogVisible = true" type="primary">+新增</el-button>
+      <el-button @click="opeDdialogvisible" type="primary">+新增</el-button>
       <el-form style="display: flex; align-items: center;">
         <el-form-item>
           <el-input v-model="form1.select" style="margin-top: 20px"></el-input>
@@ -9,7 +9,7 @@
         <el-button @click="select" type="primary" style="height: 40px; margin-left: 10px">搜索</el-button>
       </el-form>
     </div>
-    <el-dialog title="新增用户" :visible.sync="dialogVisible" width="50%" class="text">
+    <el-dialog :title="getDialogType" :visible.sync="dialogVisible" width="50%" class="text">
       <common-form @addUser="addUser" :form="form"></common-form>
     </el-dialog>
     <el-table :data="userInfo" style="width: 100%;line-height: 30px; margin-top: 20px;">
@@ -40,12 +40,14 @@
 
 <script>
 import CommonForm from "components/CommonForm.vue";
-import { getUserInfo } from 'network/aside'
+import { getUserInfo, test } from 'network/aside'
+import axios from "axios";
 export default {
   name: "User",
   data() {
     return {
       dialogVisible: false,
+      dialogType: true,
       form1: {
         select: ''
       },
@@ -65,23 +67,53 @@ export default {
         .catch((_) => { });
     },
     select() {
-
+      console.log(this.form1);
     },
     handleEdit(index, row) {
+      this.dialogType = false
+      console.log(this.dialogType);
       this.form = row
       this.dialogVisible = true
     },
     handleDelete(index, row) {
-      console.log(index, row);
-      this.userInfo.splice(index, 1, row)
-      this.dialogVisible = false
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.userInfo.splice(index, 1)
+        this.dialogVisible = false
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+
     },
     addUser(value) {
       this.userInfo.push(value)
       this.dialogVisible = false
+    },
+    opeDdialogvisible() {
+      this.dialogVisible = true
+      this.dialogType = true
+      console.log(this.dialogType);
     }
   },
-
+  computed: {
+    getDialogType() {
+      if (this.dialogType) {
+        return '新增用户'
+      } else {
+        return '编辑用户'
+      }
+    }
+  },
   mounted() {
     getUserInfo().then(res => {
       this.userInfo = res

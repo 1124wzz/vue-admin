@@ -28,7 +28,7 @@ export default {
   name: "CommonHeader",
   data() {
     return {
-      userImg: require("../assets/logo.png"),
+      userImg: require("../../assets/logo.png"),
     };
   },
   methods: {

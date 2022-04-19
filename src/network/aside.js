@@ -23,3 +23,10 @@ export function getUserInfo() {
     url: "/user-info",
   });
 }
+
+export function test(params) {
+  return request({
+    url: "/test",
+    params,
+  });
+}
