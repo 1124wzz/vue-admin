@@ -28,6 +28,7 @@ import {
   TimePicker,
   Checkbox,
   Dialog,
+  Pagination,
 } from "element-ui";
 
 export default {
@@ -60,5 +61,6 @@ export default {
     TimePicker,
     Checkbox,
     Dialog,
+    Pagination,
   ],
 };

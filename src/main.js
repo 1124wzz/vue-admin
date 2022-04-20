@@ -11,6 +11,17 @@ import "./plugins";
 
 Vue.config.productionTip = false;
 
+// 导航守卫
+router.beforeEach((to, from, next) => {
+  store.commit("getToken");
+  const token = store.state.User.token;
+  if (!token && to.name != "/login") {
+    next({ name: "/login" });
+  } else {
+    next();
+  }
+});
+
 new Vue({
   router,
   store,

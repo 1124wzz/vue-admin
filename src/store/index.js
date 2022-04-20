@@ -1,12 +1,14 @@
 import Vue from "vue";
-import Vuex from 'vuex'
-import tab from './tab'
+import Vuex from "vuex";
+import tab from "./tab";
+import User from "./user";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules: {
-    tab
-  }
-})
-export default store
+    tab,
+    User,
+  },
+});
+export default store;
