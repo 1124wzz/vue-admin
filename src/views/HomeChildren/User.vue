@@ -26,6 +26,7 @@
       :data="userInfo"
       style="width: 100%; line-height: 30px; margin-top: 20px"
     >
+      <el-table-column prop="id" label="序号" width="180"> </el-table-column>
       <el-table-column prop="name" label="姓名" width="180"> </el-table-column>
       <el-table-column prop="age" label="年龄" width="180"> </el-table-column>
       <el-table-column prop="sex" label="性别" width="180"> </el-table-column>
@@ -35,14 +36,12 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button
-          >
+            >编辑</el-button>
           <el-button
             size="mini"
             type="danger"
             @click="handleDelete(scope.$index, scope.row)"
-            >删除</el-button
-          >
+            >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -60,8 +59,7 @@
 
 <script>
 import CommonForm from "components/CommonForm.vue";
-import { getUserInfo, test } from "network/aside";
-import axios from "axios";
+import { getUserInfo } from "network/aside";
 export default {
   name: "User",
   data() {
@@ -89,11 +87,11 @@ export default {
         .catch((_) => { });
     },
     select() {
-      // console.log(this.form1);
-      this.userInfo = this.userInfo.filter((item) => {
-        return item.name === this.form1.select;
-      });
-      console.log(this.userInfo);
+      if (this.form1.select) {
+        this.userInfo = this.userInfo.filter((item) => {
+          return item.name === this.form1.select;
+        });
+      }
     },
     handleEdit(index, row) {
       this.dialogType = false;
@@ -149,13 +147,12 @@ export default {
       this.dialogVisible = false;
       this.$message({
         type: "success",
-        message: "更新成功",
+        message: "新增成功",
       });
     },
     opeDdialogvisible() {
       this.dialogVisible = true;
       this.dialogType = true;
-      console.log(this.dialogType);
     },
     dateFormat(dateData) {
       var date = new Date(dateData);

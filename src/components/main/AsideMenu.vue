@@ -5,7 +5,7 @@
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b">
-    <h3>{{ isCollapse? '后台' : '后台管理系统' }}</h3>
+    <h3>{{ isCollapse? 'OPPO' : 'OPPO管理系统' }}</h3>
     <el-menu-item v-for="(item) in noChildren" :index="item.name + ''" :key="item.path" @click="pathClick(item)">
       <i :class="'el-icon-' + item.icon"></i>
       <span slot="title">{{ item.label }}</span>

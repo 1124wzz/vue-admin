@@ -24,9 +24,8 @@ export function getUserInfo() {
   });
 }
 
-export function test(params) {
+export function getMall() {
   return request({
-    url: "/test",
-    params,
+    url: "/mall",
   });
 }
