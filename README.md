@@ -1,7 +1,7 @@
 
 
 ## main分支是前端代码
-### master分支是后端接口代码(node+express+MongoDB)
+## master分支是后端接口代码(node+express+MongoDB)
 ## Project setup
 ```
 npm install
