@@ -3,8 +3,10 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import * as echarts from "echarts";
+import axios from "axios";
 
 Vue.prototype.$echarts = echarts;
+Vue.prototype.$axios = axios;
 
 // 引入element组件
 import "./plugins";

@@ -6,19 +6,38 @@
             text-color="#fff"
             active-text-color="#ffd04b">
     <h3>{{ isCollapse? 'OPPO' : 'OPPO管理系统' }}</h3>
-    <el-menu-item v-for="(item) in noChildren" :index="item.name + ''" :key="item.path" @click="pathClick(item)">
-      <i :class="'el-icon-' + item.icon"></i>
-      <span slot="title">{{ item.label }}</span>
-    </el-menu-item>
-    <el-submenu v-for="(item, index) in hasChildren" :index="item.name + ''" :key="index">
-      <template slot="title">
-        <i :class="'el-icon-' + item.icon"></i>
-        <span slot="title">{{ item.label }}</span>
-      </template>
-      <el-menu-item-group v-for="(item, index) in item.children" :key="index">
-        <el-menu-item :index="item.name + ''">{{ item.label }}</el-menu-item>
-      </el-menu-item-group>
-    </el-submenu>
+    <router-link to="/home">
+			<el-menu-item index="home">
+			  <i class="el-icon-s-home"></i>
+			  <span slot="title">首页</span>
+			</el-menu-item>
+		</router-link>
+		<router-link to="/user">
+			<el-menu-item index="user">
+			  <i class="el-icon-user"></i>
+			  <span slot="title">用户管理</span>
+			</el-menu-item>
+		</router-link>
+		<router-link to="/mall">
+			<el-menu-item index="mall">
+			  <i class="el-icon-video-play"></i>
+			  <span slot="title">商品管理</span>
+			</el-menu-item>
+		</router-link>
+			<el-submenu index="other" >
+			  <template slot="title">
+			    <i class="el-icon-location"></i>
+			    <span slot="title">其他</span>
+			  </template>
+			  <el-menu-item-group>
+			    <router-link to="/page1">
+						<el-menu-item index="page1" class="el-icon-setting">页面1</el-menu-item>
+					</router-link>
+			    <router-link to="/page2">
+						<el-menu-item index="page1" class="el-icon-setting">页面2</el-menu-item>
+					</router-link>
+			  </el-menu-item-group>
+			</el-submenu>
   </el-menu>
 </template>
 
@@ -52,7 +71,7 @@ export default {
   },
   mounted() {
     getAside().then(res => {
-      this.menu = res.result
+      this.menu = res
     })
   },
 }

@@ -1,8 +1,5 @@
 <template>
   <el-form ref="form" :model="form" label-width="80px">
-  <el-form-item label="序号:">
-    <el-input v-model="form.id"></el-input>
-  </el-form-item>
   <el-form-item label="型号:">
     <el-input v-model="form.name"></el-input>
   </el-form-item>
@@ -27,7 +24,6 @@ export default {
   name: 'CommonForm',
   props: {
     form: {
-      id: '',
       name: '',
       stock: '',
       price: '',

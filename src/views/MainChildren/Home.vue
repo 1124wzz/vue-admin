@@ -23,8 +23,8 @@ export default {
   },
   mounted() {
     getTable().then((res) => {
-      this.tableData = res.result1;
-      this.countData = res.result2
+      this.tableData = res[0].result1;
+      this.countData = res[0].result2
     });
   },
 };

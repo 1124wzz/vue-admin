@@ -26,7 +26,6 @@
       :data="main_info"
       style="width: 100%; line-height: 30px; margin-top: 20px"
     >
-      <el-table-column prop="id" label="序号" width="180"> </el-table-column>
       <el-table-column prop="name" label="手机型号" width="180"> </el-table-column>
       <el-table-column prop="stock" label="总库存" width="180"> </el-table-column>
       <el-table-column prop="price" label="价格" width="180"> </el-table-column>
@@ -57,10 +56,12 @@
 </template>
 
 <script>
+import qs from 'qs'
 import MallForm from 'components/MallForm.vue'
 import { getMall } from "network/aside";
 export default {
   name: 'Mall',
+  inject: ['reload'],
   data() {
     return {
       dialogVisible: false,
@@ -80,32 +81,40 @@ export default {
   methods: {
     addMall(value) {
       if (this.dialogType) {
-        this.addPerson(value);
+        let data = qs.stringify({
+          name: value.name,
+          stock: value.stock,
+          price: value.price,
+          surplus_stock: value.surplus_stock
+        })
+        this.$axios.post('http://127.0.0.1:5000/api/user/addMall', data)
+          .then(res => {
+            let code = res.data.err_code
+            if (code == 400) {
+              this.$message({
+                type: 'info',
+                message: '商品已存在'
+              })
+            } else {
+              this.$message({
+                type: 'success',
+                message: '新增成功'
+              })
+            }
+          })
+        this.dialogVisible = false
+        this.reload()
       } else {
-        this.edidMall(value);
+        let data = qs.stringify({
+          name: value.name,
+          stock: value.stock,
+          price: value.price,
+          surplus_stock: value.surplus_stock
+        })
+        this.$axios.post('http://127.0.0.1:5000/api/user/editMall', data)
+        this.reload()
+        this.dialogVisible = false
       }
-    },
-    edidMall(value) {
-      this.userInfo.forEach((item) => {
-        if (value.name === item.name) {
-          item.stock = value.stock;
-          item.price = value.price;
-          item.surplus_stock = value.surplus_stock;
-          this.dialogVisible = false;
-          this.$message({
-            type: "success",
-            message: "更新成功",
-          });
-        }
-      });
-    },
-    addPerson(value) {
-      this.userInfo.unshift(value);
-      this.dialogVisible = false;
-      this.$message({
-        type: "success",
-        message: "新增成功",
-      });
     },
     canel() {
       this.dialogVisible = false
@@ -125,7 +134,10 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.main_info.splice(index, 1);
+          let data = qs.stringify({
+            name: row.name
+          })
+          this.$axios.post('http://127.0.0.1:5000/api/user/deleteMall', data)
           this.dialogVisible = false;
           this.$message({
             type: "success",

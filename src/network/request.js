@@ -1,9 +1,10 @@
 import axios from "axios";
+import qs from "qs";
 
 // 4. 因为intance默认返回的时Promise so
 export function request(config) {
   const instance = axios.create({
-    baseURL: "http://127.0.0.1:8000",
+    baseURL: "http://127.0.0.1:5000/api/user",
     timeout: 5000,
   });
   // axios 拦截器

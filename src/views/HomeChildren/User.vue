@@ -20,19 +20,18 @@
       width="50%"
       class="text"
     >
-      <common-form @addUser="addUser" :form="form" @canel="canel"></common-form>
+      <common-form @addUser="addUser" :form="form" :dialogType="dialogType" @canel="canel"></common-form>
     </el-dialog>
     <el-table
-      :data="userInfo"
+      :data="getUserInfo"
       style="width: 100%; line-height: 30px; margin-top: 20px"
     >
-      <el-table-column prop="id" label="序号" width="180"> </el-table-column>
-      <el-table-column prop="name" label="姓名" width="180"> </el-table-column>
-      <el-table-column prop="age" label="年龄" width="180"> </el-table-column>
-      <el-table-column prop="sex" label="性别" width="180"> </el-table-column>
+      <el-table-column prop="name" label="姓名" width="180" />
+      <el-table-column prop="age" label="年龄" width="180"/>
+      <el-table-column prop="sex" label="性别" width="180"/>
       <el-table-column prop="birthday" label="生日" width="180">
       </el-table-column>
-      <el-table-column prop="address" label="地址"> </el-table-column>
+      <el-table-column prop="address" label="地址" width="180" />
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
@@ -47,21 +46,24 @@
     </el-table>
     <div class="block">
       <el-pagination class="pagination"
-                    :page-size="pageSize"
-                    style="line-height: 20px"
-                    layout="prev, pager, next"
-                    :total="getUserInfoLength"
-                    @current-change="currentChange"
+                    :page-size="5"
+                    style="line-height: 20px" layout="total, sizes, prev, pager, next, jumper"
+                    :total="userInfoLength"
+                    :page-sizes="pageSizes"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
                     :current-page="currentPage" />
     </div>
   </div>
 </template>
 
 <script>
+import qs from 'qs'
 import CommonForm from "components/CommonForm.vue";
-import { getUserInfo } from "network/aside";
+import { getUserInfo, add } from "network/aside";
 export default {
   name: "User",
+  inject: ['reload'],
   data() {
     return {
       dialogVisible: false,
@@ -71,8 +73,9 @@ export default {
       },
       form: {},
       userInfo: [],
+      userInfoLength: 0,
       currentPage: 1,
-      pageSize: 1,
+      pageSizes: [1, 2, 3, 4]
     };
   },
   components: {
@@ -105,12 +108,18 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.userInfo.splice(index, 1);
+          let data = qs.stringify({
+            name: row.name
+          })
+
+          this.$axios.post('http://127.0.0.1:5000/api/user/deleteUser', data)
           this.dialogVisible = false;
+
           this.$message({
             type: "success",
             message: "删除成功!",
           });
+          this.reload()
         })
         .catch(() => {
           this.$message({
@@ -121,34 +130,42 @@ export default {
     },
     addUser(value) {
       if (this.dialogType) {
-        this.addPerson(value);
+        let data = qs.stringify({
+          name: value.name,
+          age: value.age,
+          sex: value.sex,
+          birthday: value.birthday,
+          address: value.address
+        })
+        this.$axios.post('http://127.0.0.1:5000/api/user/addUser', data)
+          .then(res => {
+            let code = res.data.err_code
+            if (code == 400) {
+              this.$message({
+                type: 'info',
+                message: '用户已存在'
+              })
+            } else {
+              this.$message({
+                type: 'success',
+                message: '新增成功'
+              })
+            }
+          })
+        this.dialogVisible = false
+        this.reload()
       } else {
-        this.edidUser(value);
+        let data = qs.stringify({
+          name: value.name,
+          age: value.age,
+          sex: value.sex,
+          birthday: value.birthday,
+          address: value.address
+        })
+        this.$axios.post('http://127.0.0.1:5000/api/user/editUser', data)
+        this.reload()
+        this.dialogVisible = false
       }
-    },
-    edidUser(value) {
-      this.userInfo.forEach((item) => {
-        if (value.name === item.name) {
-          item.age = value.age;
-          item.sex = value.sex;
-          item.birthday = this.dateFormat(value.birthday);
-          item.address = value.address;
-          this.dialogVisible = false;
-          this.$message({
-            type: "success",
-            message: "更新成功",
-          });
-        }
-      });
-    },
-    addPerson(value) {
-      value.birthday = this.dateFormat(value.birthday);
-      this.userInfo.unshift(value);
-      this.dialogVisible = false;
-      this.$message({
-        type: "success",
-        message: "新增成功",
-      });
     },
     opeDdialogvisible() {
       this.dialogVisible = true;
@@ -167,9 +184,12 @@ export default {
     canel() {
       this.dialogVisible = false;
     },
-    currentChange(currentPage) {
-      this.currentPage = currentPage;
-      console.log(currentPage);
+    handleSizeChange(val) {
+      console.log(val);
+      this.PageSize = val
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
     },
   },
   computed: {
@@ -180,13 +200,17 @@ export default {
         return "编辑用户";
       }
     },
-    getUserInfoLength() {
-      return this.userInfo.length
+    getUserInfo() {
+      this.userInfo.forEach(item => {
+        item.birthday = this.dateFormat(item.birthday)
+      })
+      return this.userInfo
     }
   },
   mounted() {
     getUserInfo().then((res) => {
-      this.userInfo = res;
+      this.userInfo = res
+      this.userInfoLength = res.length
     });
   },
 };

@@ -34,9 +34,10 @@ export default {
   mounted() {
 
     getEcharts().then(res => {
+      console.log(res[0]);
       // console.log(res.data);
-      const data = res.orderData.data
-      const date = res.orderData.date
+      const data = res[0].orderData.data
+      const date = res[0].orderData.date
 
       // 折线图
       const keyArray = Object.keys(data[0])
@@ -71,7 +72,7 @@ export default {
         tooltip: {},
         xAxis: {
           type: 'category',
-          data: res.userData.map(item => item.date)
+          data: res[0].userData.map(item => item.date)
         },
         yAxis: {},
         legend: {
@@ -81,12 +82,12 @@ export default {
         series: [
           {
             name: '新增用户',
-            data: res.userData.map(item => item.new),
+            data: res[0].userData.map(item => item.new),
             type: 'bar'
           },
           {
             name: '活跃用户',
-            data: res.userData.map(item => item.active),
+            data: res[0].userData.map(item => item.active),
             type: 'bar'
           }
         ]
@@ -108,7 +109,7 @@ export default {
         ],
         series: [
           {
-            data: res.videoData,
+            data: res[0].videoData,
             type: 'pie'
           }
         ]

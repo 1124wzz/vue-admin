@@ -15,7 +15,7 @@
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>个人中心</el-dropdown-item>
-          <el-dropdown-item>退出</el-dropdown-item>
+          <el-dropdown-item @click.native="loginOut">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -35,6 +35,13 @@ export default {
     menuClick() {
       this.$store.commit("isCollapse");
     },
+    loginOut() {
+      console.log(123);
+      this.$store.commit('clearToken')
+      this.$router.push({
+        name: '/login'
+      })
+    }
   },
   computed: {
     ...mapState({

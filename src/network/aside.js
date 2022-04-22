@@ -29,3 +29,13 @@ export function getMall() {
     url: "/mall",
   });
 }
+
+// export function add(form) {
+//   return request({
+//     url: "/add",
+//     method: "post",
+//     params: {
+//       data: form,
+//     },
+//   });
+// }

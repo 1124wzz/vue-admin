@@ -10,7 +10,7 @@ VueRouter.prototype.push = function push(location) {
 
 const routes = [
   {
-    path: "/",
+    path: "/main",
     name: "Main",
     component: () => import("components/main/Main.vue"),
     children: [
@@ -29,12 +29,26 @@ const routes = [
         name: "/user",
         component: () => import("views/HomeChildren/User.vue"),
       },
+      {
+        path: "/page1",
+        name: "/page1",
+        component: () => import("views/others/otherOne.vue"),
+      },
+      {
+        path: "/page2",
+        name: "/page2",
+        component: () => import("views/others/OtherTwo.vue"),
+      },
     ],
   },
   {
     path: "/login",
     name: "/login",
     component: () => import("views/login/index.vue"),
+  },
+  {
+    path: "/",
+    redirect: "/home",
   },
 ];
 
