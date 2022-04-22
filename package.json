@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "axios": "^0.26.1",
+    "blueimp-md5": "^2.19.0",
+    "body-parser": "^1.20.0",
+    "element-ui": "^2.15.8",
+    "express": "^4.17.3",
+    "mongoose": "^6.3.0"
+  },
+  "devDependencies": {
+    "babel-plugin-component": "^1.1.1"
+  },
+  "scripts": {
+    "serve": "nodemon server.js"
+  }
+}
